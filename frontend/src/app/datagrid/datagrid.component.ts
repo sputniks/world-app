@@ -18,25 +18,21 @@ export class DatagridComponent implements AfterViewInit {
 
   constructor(private httpService: HttpService) { }  
 
-  
-
   source: any =
   {
-    localdata: [{"firstname": "Pasha", 
-                  "lastname": "Ivanov", 
-                  "productname": "Product name", 
-                  "available": "false", 
-                  "quantity": "3  ", 
-                  "price": "7.77", 
-                  "date": "Fri Nov 19 2016 00:00:00 GMT-0800 (Pacific Standard Time)"},],
+    localdata: [{ "ID": "Number ID", 
+                  "Name": "String as Name", 
+                  "CountryCode": "String as CountryCode", 
+                  "District": "String as District", 
+                  "Population": "Number as Population"},
+                 ],
     datafields:
     [
-      { name: 'firstname', type: 'string' },
-      { name: 'lastname', type: 'string' },
-      { name: 'productname', type: 'string' },
-      { name: 'quantity', type: 'number' },
-      { name: 'price', type: 'number' },
-      { name: 'total', type: 'number' }
+      { name: 'ID', type: 'number' },
+      { name: 'Name', type: 'string' },
+      { name: 'CountryCode', type: 'string' },
+      { name: 'District', type: 'string' },
+      { name: 'Population', type: 'number' },
     ],
     datatype: 'array'
   }
@@ -45,27 +41,16 @@ export class DatagridComponent implements AfterViewInit {
 
   columns: any[] =
   [
-    { text: 'First Name', columntype: 'textbox', datafield: 'firstname', width: 120 },
-    { text: 'Last Name', datafield: 'lastname', columntype: 'textbox', width: 120 },
-    { text: 'Product', columntype: 'dropdownlist', datafield: 'productname', width: 195 },
-    { text: 'Available', datafield: 'available', columntype: 'checkbox', width: 67 },
+    { text: 'Id', datafield: 'ID', columntype: 'textbox', width: 120 },
+    { text: 'Name', datafield: 'Name', columntype: 'textbox', width: 240 },
+    { text: 'Country Code', datafield: 'CountryCode', columntype: 'textbox', width: 120 },
+    { text: 'District', datafield: 'District', columntype: 'textbox', width: 180 },
+
     {
-      text: 'Ship Date', datafield: 'date', columntype: 'datetimeinput', width: 110, align: 'right', cellsalign: 'right', cellsformat: 'd',
-      validation: (cell: any, value: any): any => {
-        if (value == '')
-          return true;
-        let year = value.getFullYear();
-        if (year >= 2017) {
-          return { result: false, message: 'Ship Date should be before 1/1/2017' };
-        }
-        return true;
-      }
-    },
-    {
-      text: 'Quantity', datafield: 'quantity', width: 70, align: 'right', cellsalign: 'right', columntype: 'numberinput',
+      text: 'Population', datafield: 'Population', width: 120, align: 'right', cellsalign: 'right', columntype: 'numberinput',
       validation: (cell: any, value: number): any => {
         if (value < 0 || value > 150) {
-          return { result: false, message: 'Quantity should be in the 0-150 interval' };
+          return { result: false, message: 'Population should be in the 0-150 interval' };
         }
         return true;
       },
@@ -73,24 +58,9 @@ export class DatagridComponent implements AfterViewInit {
         editor.jqxNumberInput({ decimalDigits: 0, digits: 3 });
       }
     },
-    {
-      text: 'Price', datafield: 'price', align: 'right', cellsalign: 'right', cellsformat: 'c2', columntype: 'numberinput',
-      validation: (cell: any, value: number): any => {
-        if (value < 0 || value > 15) {
-          return { result: false, message: 'Price should be in the 0-15 interval' };
-        }
-        return true;
-      },
-      createeditor: (row: number, cellvalue: any, editor: any): void => {
-        editor.jqxNumberInput({ digits: 3 });
-      }
-    }
   ];
 
-
   getData() {
-    // this.source.localdata = generatedata(500, false);
-    // this.myGrid.updatebounddata('cells');
     this.httpService.getCities()
       .subscribe((data) => {
         this.source.localdata = data;
@@ -106,10 +76,10 @@ export class DatagridComponent implements AfterViewInit {
 
   getWidth() : any {
     if (document.body.offsetWidth < 850) {
-      return '90%';
+      return '99%';
     }
     
-    return 850;
+    return '100%';
   }
 
   refreshBtnOnClick(): void {
