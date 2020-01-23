@@ -1,0 +1,22 @@
+<p>datagrid works!</p>
+
+<jqxGrid #myGrid 
+  (onCellbeginedit)="cellBeginEditEvent($event)" 
+  (onCellendedit)="cellEndEditEvent($event)"
+  [width]="getWidth()" 
+  [source]="dataAdapter" 
+  [columns]="columns"
+  [editable]="true" 
+  [enabletooltips]="true" 
+  [selectionmode]="'multiplecellsadvanced'">
+</jqxGrid>
+
+<div style="margin-top: 10px">
+  <jqxButton (onClick)="refreshBtnOnClick()">Refresh Data</jqxButton>
+  <jqxButton (onClick)="clearBtnOnClick()">Clear</jqxButton>
+</div>
+
+<div style="font-size: 12px; font-family: Verdana; margin-top: 30px;">
+    <div #beginEdit></div>
+    <div #endEdit style="margin-top: 10px;"></div>
+</div>
