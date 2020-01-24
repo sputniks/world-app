@@ -6,6 +6,10 @@ import { HttpService } from '../http.service';
 
 import { generatedata } from '../../../sampledata/generatedata';
 
+import { jqxPanelComponent } from 'jqwidgets-ng/jqxpanel';
+
+import { jqxMenuComponent } from 'jqwidgets-ng/jqxmenu';
+
 @Component({
   selector: 'app-datagrid',
   templateUrl: './datagrid.component.html',
@@ -16,6 +20,14 @@ export class DatagridComponent implements AfterViewInit {
   @ViewChild('myGrid', { static: false }) myGrid: jqxGridComponent;
   @ViewChild('beginEdit', { static: false }) beginEdit: ElementRef;
   @ViewChild('endEdit', { static: false }) endEdit: ElementRef;
+
+  @ViewChild('myPanel', { static: false }) myPanel: jqxPanelComponent;
+
+  @ViewChild('myMenu', { static: false }) myMenu: jqxMenuComponent;
+
+
+
+
 
   constructor(private httpService: HttpService) { }  
 
@@ -71,6 +83,7 @@ export class DatagridComponent implements AfterViewInit {
 
 
   ngAfterViewInit() {
+  	document.addEventListener('contextmenu', event => event.preventDefault());
     this.getData();
   }
 
@@ -104,6 +117,27 @@ export class DatagridComponent implements AfterViewInit {
   cellEndEditEvent(event: any): void {
     let args = event.args;
     this.endEdit.nativeElement.innerHTML = 'Event Type: cellendedit, Column: ' + args.datafield + ', Row: ' + (1 + args.rowindex) + ', Value: ' + args.value;
+  }
+
+  tableOnPageSizeChanged(event: any): void {
+    this.myPanel.clearcontent();
+    let args = event.args;
+    let eventData = '<div>Page:' + (1 + args.pagenum) + ', Page Size: ' + args.pageSize + ', Old Page Size: ' + args.oldPageSize + '</div>';
+    this.myPanel.prepend('<div style="margin-top: 5px;">' + eventData + '</div>');
+  };
+
+  myGridOnRowClick(event: any): void | boolean {
+    if (event.args.rightclick) {
+      this.myGrid.selectrow(event.args.rowindex);
+      let scrollTop = window.scrollY;
+      let scrollLeft = window.scrollX;
+      this.myMenu.open(parseInt(event.args.originalEvent.clientX) + 5 + scrollLeft, parseInt(event.args.originalEvent.clientY) + 5 + scrollTop);
+      return false;
+    }
+  }
+
+  myGridOnContextMenu(): boolean {
+    return false;
   }
 
 }

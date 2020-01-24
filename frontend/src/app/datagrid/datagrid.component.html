@@ -3,6 +3,9 @@
 <jqxGrid #myGrid 
   (onCellbeginedit)="cellBeginEditEvent($event)" 
   (onCellendedit)="cellEndEditEvent($event)"
+  (onPageSizeChanged)="tableOnPageSizeChanged($event)"
+  (onContextmenu)="myGridOnContextMenu()"
+  (onRowclick)="myGridOnRowClick($event)"
   [width]="getWidth()" 
   [source]="dataAdapter" 
   [columns]="columns"
@@ -10,6 +13,7 @@
   [enabletooltips]="true" 
   [theme]="'metrodark'"
   [pageable]="true" 
+  [autoheight]="true"
   [selectionmode]="'multiplecellsadvanced'">
 </jqxGrid>
 
@@ -19,7 +23,22 @@
 </div>
 
 <div style="font-size: 12px; font-family: Verdana; margin-top: 30px;">
-    <div #beginEdit></div>
-    <div #endEdit style="margin-top: 10px;"></div>
+  <div #beginEdit></div>
+  <div #endEdit style="margin-top: 10px;"></div>
 </div>
 
+<jqxPanel #myPanel style="margin-top: 5px"
+  [width]="150" [height]="150">
+</jqxPanel>
+
+<jqxMenu #myMenu 
+  (onItemclick)="myMenuOnItemClick($event)"
+  [width]="200" 
+  [height]="58" 
+  [mode]="'popup'" 
+  [autoOpenPopup]="false">
+  <ul>
+    <li>Edit Selected Row</li>
+    <li>Delete Selected Row</li>
+  </ul>
+</jqxMenu>
