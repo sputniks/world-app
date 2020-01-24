@@ -10,10 +10,12 @@ import { jqxGridModule } from 'jqwidgets-ng/jqxgrid';
 import { jqxButtonModule } from 'jqwidgets-ng/jqxbuttons';
 import { HttpClientModule }    from '@angular/common/http';
 
+import { jqxDataTableModule }   from 'jqwidgets-ng/jqxdatatable';
+
 @NgModule({
   declarations: [
     AppComponent,
-    DatagridComponent
+    DatagridComponent,
   ],
   imports: [
     BrowserModule,
@@ -23,8 +25,11 @@ import { HttpClientModule }    from '@angular/common/http';
     jqxGridModule, 
     jqxButtonModule,
     HttpClientModule,
+
+    jqxDataTableModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

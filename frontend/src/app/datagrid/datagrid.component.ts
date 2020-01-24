@@ -4,12 +4,13 @@ import { jqxGridComponent } from 'jqwidgets-ng/jqxgrid'
 
 import { HttpService } from '../http.service';
 
+import { generatedata } from '../../../sampledata/generatedata';
+
 @Component({
   selector: 'app-datagrid',
   templateUrl: './datagrid.component.html',
   styleUrls: ['./datagrid.component.css']
 })
-
 
 export class DatagridComponent implements AfterViewInit {
   @ViewChild('myGrid', { static: false }) myGrid: jqxGridComponent;
