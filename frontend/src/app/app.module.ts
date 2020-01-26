@@ -21,11 +21,13 @@ import { jqxPanelModule } from 'jqwidgets-ng/jqxpanel';
 import { jqxMenuModule } from 'jqwidgets-ng/jqxmenu';
 import { jqxNumberInputModule } from 'jqwidgets-ng/jqxnumberinput';
 import { jqxWindowModule } from 'jqwidgets-ng/jqxwindow';
+import { DebugpanelComponent } from './debugpanel/debugpanel.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DatagridComponent,
+    DebugpanelComponent,
   ],
   imports: [
     BrowserModule,

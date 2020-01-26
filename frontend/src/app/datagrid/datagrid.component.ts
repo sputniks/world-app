@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, OnInit}  from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, OnInit }  from '@angular/core';
 
 import { jqxGridComponent } from 'jqwidgets-ng/jqxgrid'
 
@@ -6,9 +6,9 @@ import { HttpService } from '../http.service';
 
 import { generatedata } from '../../../sampledata/generatedata';
 
-import { jqxPanelComponent } from 'jqwidgets-ng/jqxpanel';
-
 import { jqxMenuComponent } from 'jqwidgets-ng/jqxmenu';
+
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-datagrid',
@@ -17,16 +17,10 @@ import { jqxMenuComponent } from 'jqwidgets-ng/jqxmenu';
 })
 
 export class DatagridComponent implements AfterViewInit {
-  @ViewChild('myGrid', { static: false }) myGrid: jqxGridComponent;
-  @ViewChild('beginEdit', { static: false }) beginEdit: ElementRef;
-  @ViewChild('endEdit', { static: false }) endEdit: ElementRef;
+  @ViewChild('myGrid', { static: false }) myGrid: jqxGridComponent;  
+  @ViewChild('rcMenu', { static: false }) rcMenu: jqxMenuComponent;
 
-  @ViewChild('myPanel', { static: false }) myPanel: jqxPanelComponent;
-
-  @ViewChild('myMenu', { static: false }) myMenu: jqxMenuComponent;
-
-
-
+  @Output() emitter = new EventEmitter<any>();
 
 
   constructor(private httpService: HttpService) { }  
@@ -73,6 +67,10 @@ export class DatagridComponent implements AfterViewInit {
     },
   ];
 
+  fireEvent() {
+    this.emitter.emit("This is the message.")
+  }
+
   getData() {
     this.httpService.getCities()
       .subscribe((data) => {
@@ -81,12 +79,10 @@ export class DatagridComponent implements AfterViewInit {
       });
   };
 
-
   ngAfterViewInit() {
-  	document.addEventListener('contextmenu', event => event.preventDefault());
+    document.addEventListener('contextmenu', event => event.preventDefault());
     this.getData();
   }
-
 
   getWidth() : any {
     if (document.body.offsetWidth < 850) {
@@ -96,48 +92,62 @@ export class DatagridComponent implements AfterViewInit {
     return '100%';
   }
 
+
+  debug(message) {
+    return false;
+  }
+
   refreshBtnOnClick(): void {
-    // this.source.localdata = generatedata(500, false);
     // passing 'cells' to the 'updatebounddata' method will refresh only the cells values when the new rows count is equal to the previous rows count.
     this.myGrid.updatebounddata('cells');
   }
 
   clearBtnOnClick(): void {
-    // this.myGrid.clear();
     this.source.localdata = [];
     this.myGrid.updatebounddata('cells');
-
   }
 
-  cellBeginEditEvent(event: any): void {
-    let args = event.args;
-    this.beginEdit.nativeElement.innerHTML = 'Event Type: cellbeginedit, Column: ' + args.datafield + ', Row: ' + (1 + args.rowindex) + ', Value: ' + args.value;
+  onCellBeginEdit(event: any): void {
+    this.debug('onCellBeginEdit - Column: ' + event.args.datafield + ', Row: ' + (1 + event.args.rowindex) + ', Value: ' + event.args.value);
   }
 
-  cellEndEditEvent(event: any): void {
-    let args = event.args;
-    this.endEdit.nativeElement.innerHTML = 'Event Type: cellendedit, Column: ' + args.datafield + ', Row: ' + (1 + args.rowindex) + ', Value: ' + args.value;
+  onCellEndEdit(event: any): void {
+    this.debug('onCellEndEdit Column: ' + event.args.datafield + ', Row: ' + (1 + event.args.rowindex) + ', Value: ' + event.args.value);
   }
 
-  tableOnPageSizeChanged(event: any): void {
-    this.myPanel.clearcontent();
-    let args = event.args;
-    let eventData = '<div>Page:' + (1 + args.pagenum) + ', Page Size: ' + args.pageSize + ', Old Page Size: ' + args.oldPageSize + '</div>';
-    this.myPanel.prepend('<div style="margin-top: 5px;">' + eventData + '</div>');
+  onPageSizeChanged(event: any): void {
+    this.debug('onPageSizeChanged Page:' + (1 + event.args.pagenum) + ', Page Size: ' + event.args.pageSize + ', Old Page Size: ' + event.args.oldPageSize);
   };
 
-  myGridOnRowClick(event: any): void | boolean {
+  onRowClick(event: any): void | boolean {
+    this.emitter.emit({ "key1" : "SOME ARGUMENTS PASSED FROM DATAGRID.ONROWCLICK" } );
+    this.debug('onRowClick Column: ' + event.args.datafield + ', Row: ' + (1 + event.args.rowindex) + ', Value: ' + event.args.value);
     if (event.args.rightclick) {
       this.myGrid.selectrow(event.args.rowindex);
       let scrollTop = window.scrollY;
       let scrollLeft = window.scrollX;
-      this.myMenu.open(parseInt(event.args.originalEvent.clientX) + 5 + scrollLeft, parseInt(event.args.originalEvent.clientY) + 5 + scrollTop);
+      this.rcMenu.open(parseInt(event.args.originalEvent.clientX) + 5 + scrollLeft, parseInt(event.args.originalEvent.clientY) + 5 + scrollTop);
       return false;
     }
   }
 
-  myGridOnContextMenu(): boolean {
+  onContextMenu(): boolean {
+    this.debug("onContextMenu : No event here!");
     return false;
   }
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

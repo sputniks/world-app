@@ -1,20 +1,18 @@
-<p>datagrid works!</p>
-
 <jqxGrid #myGrid 
-  (onCellbeginedit)="cellBeginEditEvent($event)" 
-  (onCellendedit)="cellEndEditEvent($event)"
-  (onPageSizeChanged)="tableOnPageSizeChanged($event)"
-  (onContextmenu)="myGridOnContextMenu()"
-  (onRowclick)="myGridOnRowClick($event)"
+  (onPageSizeChanged)="onPageSizeChanged($event)"
+  (onContextmenu)="onContextMenu()"
+  (onRowclick)="onRowClick($event)"
+  (onCellbeginedit)="onCellBeginEdit($event)" 
+  (onCellendedit)="onCellEndEdit($event)"  
   [width]="getWidth()" 
   [source]="dataAdapter" 
   [columns]="columns"
   [editable]="true" 
+  [selectionmode]="'multiplecellsadvanced'"
   [enabletooltips]="true" 
   [theme]="'metrodark'"
   [pageable]="true" 
-  [autoheight]="true"
-  [selectionmode]="'multiplecellsadvanced'">
+  [autoheight]="true">
 </jqxGrid>
 
 <div style="margin-top: 10px">
@@ -22,17 +20,8 @@
   <jqxButton (onClick)="clearBtnOnClick()">Clear</jqxButton>
 </div>
 
-<div style="font-size: 12px; font-family: Verdana; margin-top: 30px;">
-  <div #beginEdit></div>
-  <div #endEdit style="margin-top: 10px;"></div>
-</div>
-
-<jqxPanel #myPanel style="margin-top: 5px"
-  [width]="150" [height]="150">
-</jqxPanel>
-
-<jqxMenu #myMenu 
-  (onItemclick)="myMenuOnItemClick($event)"
+<jqxMenu #rcMenu 
+  (onItemclick)="rcMenuOnItemClick($event)"
   [width]="200" 
   [height]="58" 
   [mode]="'popup'" 
@@ -42,3 +31,6 @@
     <li>Delete Selected Row</li>
   </ul>
 </jqxMenu>
+
+<app-debugpanel>
+</app-debugpanel>
